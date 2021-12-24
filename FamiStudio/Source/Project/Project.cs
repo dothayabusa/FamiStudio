@@ -65,7 +65,8 @@ namespace FamiStudio
         public bool UsesVrc6Expansion => (expansionMask  & ExpansionType.Vrc6Mask) != 0;
         public bool UsesVrc7Expansion => (expansionMask  & ExpansionType.Vrc7Mask) != 0;
         public bool UsesMmc5Expansion => (expansionMask  & ExpansionType.Mmc5Mask) != 0;
-        public bool UsesS5BExpansion  => (expansionMask  & ExpansionType.S5BMask)  != 0;
+        public bool UsesS5BExpansion => (expansionMask & ExpansionType.S5BMask) != 0;
+        public bool UsesYM2413Expansion => (expansionMask & ExpansionType.YM2413Mask) != 0;
 
         public string Filename    { get => filename;  set => filename  = value; }
         public string Name        { get => name;      set => name      = value; }
@@ -830,6 +831,9 @@ namespace FamiStudio
 
             if (ChannelType.GetExpansionTypeForChannelType(channelType) == ExpansionType.S5B)
                 return (expansionMask & ExpansionType.S5BMask) != 0;
+            
+            if (ChannelType.GetExpansionTypeForChannelType(channelType) == ExpansionType.YM2413)
+                return (expansionMask & ExpansionType.YM2413Mask) != 0;
 
             Debug.Assert(false);
 
@@ -1736,10 +1740,11 @@ namespace FamiStudio
         public const int Fds   = 3;
         public const int Mmc5  = 4;
         public const int N163  = 5;
-        public const int S5B   = 6;
+        public const int S5B = 6;
+        public const int YM2413 = 7;
         public const int Start = 1;
-        public const int End   = 6;
-        public const int Count = 7;
+        public const int End   = 7;
+        public const int Count = 8;
 
         public const int NoneMask = 0;
         public const int Vrc6Mask = (1 << 0);
@@ -1748,8 +1753,9 @@ namespace FamiStudio
         public const int Mmc5Mask = (1 << 3);
         public const int N163Mask = (1 << 4);
         public const int S5BMask  = (1 << 5);
+        public const int YM2413Mask = (1 << 6);
 
-        public const int AllMask  = Vrc6Mask | Vrc7Mask | FdsMask | Mmc5Mask | N163Mask | S5BMask;
+        public const int AllMask  = Vrc6Mask | Vrc7Mask | FdsMask | Mmc5Mask | N163Mask | S5BMask | YM2413Mask;
 
         public static readonly string[] Names =
         {
@@ -1759,7 +1765,8 @@ namespace FamiStudio
             "Famicom Disk System",
             "Nintendo MMC5",
             "Namco 163",
-            "Sunsoft 5B"
+            "Sunsoft 5B",
+            "Yamaha YM2413"
         };
 
         public static readonly string[] ShortNames =
@@ -1770,7 +1777,8 @@ namespace FamiStudio
             "FDS",
             "MMC5",
             "N163",
-            "S5B"
+            "S5B",
+            "YM2413"
         };
 
         // TODO: This is really UI specific, move somewhere else...
@@ -1782,12 +1790,13 @@ namespace FamiStudio
             "InstrumentFds",
             "Instrument",
             "InstrumentNamco",
-            "InstrumentSunsoft"
+            "InstrumentSunsoft",
+            "InstrumentYM2413"
         };
 
         public static bool NeedsExpansionInstrument(int value)
         {
-            return value == Fds || value == N163 || value == Vrc6 || value == Vrc7 || value == S5B;
+            return value == Fds || value == N163 || value == Vrc6 || value == Vrc7 || value == S5B || value == YM2413;
         }
 
         // Makes sure all the bits set in "sub" are also set in "reference".
@@ -1813,6 +1822,7 @@ namespace FamiStudio
             if ((mask & ExpansionType.Mmc5Mask) != 0) return Mmc5;
             if ((mask & ExpansionType.N163Mask) != 0) return N163;
             if ((mask & ExpansionType.S5BMask)  != 0) return S5B;
+            if ((mask & ExpansionType.YM2413Mask) != 0) return YM2413;
 
             return None;
         }

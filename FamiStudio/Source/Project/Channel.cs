@@ -34,6 +34,7 @@ namespace FamiStudio
         public bool IsMmc5Channel    => Expansion == ExpansionType.Mmc5;
         public bool IsS5BChannel     => Expansion == ExpansionType.S5B;
         public bool IsNoiseChannel   => type == ChannelType.Noise;
+        public bool IsYM2413Channel => Expansion == ExpansionType.YM2413;
 
         public Channel(Song song, int type, int songLength)
         {
@@ -96,6 +97,7 @@ namespace FamiStudio
             if ((expansionMask & ExpansionType.Mmc5Mask) != 0) count += 2;
             if ((expansionMask & ExpansionType.N163Mask) != 0) count += numN163Channels;
             if ((expansionMask & ExpansionType.S5BMask)  != 0) count += 3;
+            if ((expansionMask & ExpansionType.YM2413Mask) != 0) count += 9;
 
             return count;
         }
@@ -397,6 +399,13 @@ namespace FamiStudio
             if (type >= ChannelType.Vrc7Fm1 && type <= ChannelType.Vrc7Fm6)
             {
                 // VRC7 has large pitch values
+                slideShift = 3;
+                pitchShift = 3;
+            }
+            
+            else if (type >= ChannelType.YM2413Fm1 && type <= ChannelType.YM2413Fm9)
+            {
+                // YM2413 has probably large pitch values too, idk
                 slideShift = 3;
                 pitchShift = 3;
             }
@@ -993,6 +1002,8 @@ namespace FamiStudio
             if ((activeExpansions & ExpansionType.Vrc6Mask) != 0) idx += 3;
             if (exp == ExpansionType.Vrc7) return idx;
             if ((activeExpansions & ExpansionType.Vrc7Mask) != 0) idx += 6;
+            if (exp == ExpansionType.YM2413) return idx;
+            if ((activeExpansions & ExpansionType.YM2413Mask) != 0) idx += 9;
             if (exp == ExpansionType.Fds)  return idx; 
             if ((activeExpansions & ExpansionType.FdsMask)  != 0) idx += 1;
             if (exp == ExpansionType.Mmc5) return idx;
@@ -1506,7 +1517,16 @@ namespace FamiStudio
         public const int S5BSquare1 = 26;
         public const int S5BSquare2 = 27;
         public const int S5BSquare3 = 28;
-        public const int Count = 29;
+        public const int YM2413Fm1 = 29;
+        public const int YM2413Fm2 = 30;
+        public const int YM2413Fm3 = 31;
+        public const int YM2413Fm4 = 32;
+        public const int YM2413Fm5 = 33;
+        public const int YM2413Fm6 = 34;
+        public const int YM2413Fm7 = 35;
+        public const int YM2413Fm8 = 36;
+        public const int YM2413Fm9 = 37;
+        public const int Count = 38;
 
         public static readonly string[] Names =
         {
@@ -1539,6 +1559,15 @@ namespace FamiStudio
             "Square 1", // S5B
             "Square 2", // S5B
             "Square 3", // S5B
+            "FM 1", // YM2413
+            "FM 2", // YM2413
+            "FM 3", // YM2413
+            "FM 4", // YM2413
+            "FM 5", // YM2413
+            "FM 6", // YM2413
+            "FM 7", // YM2413
+            "FM 8", // YM2413
+            "FM 9" // YM2413
         };
 
         public static readonly string[] ShortNames =
@@ -1572,6 +1601,15 @@ namespace FamiStudio
             "S5BSquare1", // S5B
             "S5BSquare2", // S5B
             "S5BSquare3", // S5B
+            "YM2413FM1", // YM2413
+            "YM2413FM2", // YM2413
+            "YM2413FM3", // YM2413
+            "YM2413FM4", // YM2413
+            "YM2413FM5", // YM2413
+            "YM2413FM6", // YM2413
+            "YM2413FM7", // YM2413
+            "YM2413FM8", // YM2413
+            "YM2413FM9" // YM2413
         };
 
         // TODO: This is really UI specific, move somewhere else...
@@ -1605,7 +1643,17 @@ namespace FamiStudio
             "ChannelWaveTable",
             "ChannelSquare",
             "ChannelSquare",
-            "ChannelSquare"
+            "ChannelSquare",
+            "ChannelFM",
+            "ChannelFM",
+            "ChannelFM",
+            "ChannelFM",
+            "ChannelFM",
+            "ChannelFM",
+            "ChannelFM",
+            "ChannelFM",
+            "ChannelFM"
+
         };
 
         public static readonly int[] ExpansionTypes =
@@ -1638,7 +1686,16 @@ namespace FamiStudio
             ExpansionType.N163,
             ExpansionType.S5B,
             ExpansionType.S5B,
-            ExpansionType.S5B
+            ExpansionType.S5B,
+            ExpansionType.YM2413,
+            ExpansionType.YM2413,
+            ExpansionType.YM2413,
+            ExpansionType.YM2413,
+            ExpansionType.YM2413,
+            ExpansionType.YM2413,
+            ExpansionType.YM2413,
+            ExpansionType.YM2413,
+            ExpansionType.YM2413
         };
 
         public static readonly int[] ExpansionChannelIndex =
@@ -1671,7 +1728,16 @@ namespace FamiStudio
             7, // N163
             0, // S5B
             1, // S5B
-            2  // S5B
+            2,  // S5B
+            0, // YM2413
+            1, // YM2413
+            2, // YM2413
+            3, // YM2413
+            4, // YM2413
+            5, // YM2413
+            6, // YM2413
+            7, // YM2413
+            8 // YM2413
         };
 
         public static string GetNameWithExpansion(int type)

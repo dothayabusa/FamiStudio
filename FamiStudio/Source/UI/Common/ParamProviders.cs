@@ -67,7 +67,8 @@ namespace FamiStudio
                 instrument.IsFdsInstrument  ||
                 instrument.IsN163Instrument ||
                 instrument.IsVrc6Instrument ||
-                instrument.IsVrc7Instrument;
+                instrument.IsVrc7Instrument ||
+                instrument.IsYM2413Instrument;
         }
 
         static public ParamInfo[] GetParams(Instrument instrument)
@@ -182,6 +183,59 @@ namespace FamiStudio
                         { GetValue = () => { return (instrument.Vrc7PatchRegs[2] & 0x3f) >> 0; }, SetValue = (v) => { instrument.Vrc7PatchRegs[2] = (byte)((instrument.Vrc7PatchRegs[2] & (~0x3f)) | ((v << 0) & 0x3f)); instrument.Vrc7Patch = 0; } });
                     paramInfos.Add(new InstrumentParamInfo(instrument, "Feedback", 0, 7, (Vrc7InstrumentPatch.Infos[1].data[3] & 0x07) >> 0)
                         { GetValue = () => { return (instrument.Vrc7PatchRegs[3] & 0x07) >> 0; }, SetValue = (v) => { instrument.Vrc7PatchRegs[3] = (byte)((instrument.Vrc7PatchRegs[3] & (~0x07)) | ((v << 0) & 0x07)); instrument.Vrc7Patch = 0; } });
+                    break;
+
+                case ExpansionType.YM2413:
+                    paramInfos.Add(new InstrumentParamInfo(instrument, "Patch", 0, 15, 1, null, true)
+                    { GetValue = () => { return instrument.YM2413Patch; }, GetValueString = () => { return Instrument.GetYM2413PatchName(instrument.YM2413Patch); }, SetValue = (v) => { instrument.YM2413Patch = (byte)v; } });
+                    paramInfos.Add(new InstrumentParamInfo(instrument, "Carrier Tremolo", 0, 1, (YM2413InstrumentPatch.Infos[1].data[1] & 0x80) >> 7)
+                    { GetValue = () => { return (instrument.YM2413PatchRegs[1] & 0x80) >> 7; }, SetValue = (v) => { instrument.YM2413PatchRegs[1] = (byte)((instrument.YM2413PatchRegs[1] & (~0x80)) | ((v << 7) & 0x80)); instrument.YM2413Patch = 0; } });
+                    paramInfos.Add(new InstrumentParamInfo(instrument, "Carrier Vibrato", 0, 1, (YM2413InstrumentPatch.Infos[1].data[1] & 0x40) >> 6)
+                    { GetValue = () => { return (instrument.YM2413PatchRegs[1] & 0x40) >> 6; }, SetValue = (v) => { instrument.YM2413PatchRegs[1] = (byte)((instrument.YM2413PatchRegs[1] & (~0x40)) | ((v << 6) & 0x40)); instrument.YM2413Patch = 0; } });
+                    paramInfos.Add(new InstrumentParamInfo(instrument, "Carrier Sustained", 0, 1, (YM2413InstrumentPatch.Infos[1].data[1] & 0x20) >> 5)
+                    { GetValue = () => { return (instrument.YM2413PatchRegs[1] & 0x20) >> 5; }, SetValue = (v) => { instrument.YM2413PatchRegs[1] = (byte)((instrument.YM2413PatchRegs[1] & (~0x20)) | ((v << 5) & 0x20)); instrument.YM2413Patch = 0; } });
+                    paramInfos.Add(new InstrumentParamInfo(instrument, "Carrier Wave Rectified", 0, 1, (YM2413InstrumentPatch.Infos[1].data[3] & 0x10) >> 4)
+                    { GetValue = () => { return (instrument.YM2413PatchRegs[3] & 0x10) >> 4; }, SetValue = (v) => { instrument.YM2413PatchRegs[3] = (byte)((instrument.YM2413PatchRegs[3] & (~0x10)) | ((v << 4) & 0x10)); instrument.YM2413Patch = 0; } });
+                    paramInfos.Add(new InstrumentParamInfo(instrument, "Carrier KeyScaling", 0, 1, (YM2413InstrumentPatch.Infos[1].data[1] & 0x10) >> 4)
+                    { GetValue = () => { return (instrument.YM2413PatchRegs[1] & 0x10) >> 4; }, SetValue = (v) => { instrument.YM2413PatchRegs[1] = (byte)((instrument.YM2413PatchRegs[1] & (~0x10)) | ((v << 4) & 0x10)); instrument.YM2413Patch = 0; } });
+                    paramInfos.Add(new InstrumentParamInfo(instrument, "Carrier KeyScaling Level", 0, 3, (YM2413InstrumentPatch.Infos[1].data[3] & 0xc0) >> 6)
+                    { GetValue = () => { return (instrument.YM2413PatchRegs[3] & 0xc0) >> 6; }, SetValue = (v) => { instrument.YM2413PatchRegs[3] = (byte)((instrument.YM2413PatchRegs[3] & (~0xc0)) | ((v << 6) & 0xc0)); instrument.YM2413Patch = 0; } });
+                    paramInfos.Add(new InstrumentParamInfo(instrument, "Carrier FreqMultiplier", 0, 15, (YM2413InstrumentPatch.Infos[1].data[1] & 0x0f) >> 0)
+                    { GetValue = () => { return (instrument.YM2413PatchRegs[1] & 0x0f) >> 0; }, SetValue = (v) => { instrument.YM2413PatchRegs[1] = (byte)((instrument.YM2413PatchRegs[1] & (~0x0f)) | ((v << 0) & 0x0f)); instrument.YM2413Patch = 0; } });
+                    paramInfos.Add(new InstrumentParamInfo(instrument, "Carrier Attack", 0, 15, (YM2413InstrumentPatch.Infos[1].data[5] & 0xf0) >> 4)
+                    { GetValue = () => { return (instrument.YM2413PatchRegs[5] & 0xf0) >> 4; }, SetValue = (v) => { instrument.YM2413PatchRegs[5] = (byte)((instrument.YM2413PatchRegs[5] & (~0xf0)) | ((v << 4) & 0xf0)); instrument.YM2413Patch = 0; } });
+                    paramInfos.Add(new InstrumentParamInfo(instrument, "Carrier Decay", 0, 15, (YM2413InstrumentPatch.Infos[1].data[5] & 0x0f) >> 0)
+                    { GetValue = () => { return (instrument.YM2413PatchRegs[5] & 0x0f) >> 0; }, SetValue = (v) => { instrument.YM2413PatchRegs[5] = (byte)((instrument.YM2413PatchRegs[5] & (~0x0f)) | ((v << 0) & 0x0f)); instrument.YM2413Patch = 0; } });
+                    paramInfos.Add(new InstrumentParamInfo(instrument, "Carrier Sustain", 0, 15, (YM2413InstrumentPatch.Infos[1].data[7] & 0xf0) >> 4)
+                    { GetValue = () => { return (instrument.YM2413PatchRegs[7] & 0xf0) >> 4; }, SetValue = (v) => { instrument.YM2413PatchRegs[7] = (byte)((instrument.YM2413PatchRegs[7] & (~0xf0)) | ((v << 4) & 0xf0)); instrument.YM2413Patch = 0; } });
+                    paramInfos.Add(new InstrumentParamInfo(instrument, "Carrier Release", 0, 15, (YM2413InstrumentPatch.Infos[1].data[7] & 0x0f) >> 0)
+                    { GetValue = () => { return (instrument.YM2413PatchRegs[7] & 0x0f) >> 0; }, SetValue = (v) => { instrument.YM2413PatchRegs[7] = (byte)((instrument.YM2413PatchRegs[7] & (~0x0f)) | ((v << 0) & 0x0f)); instrument.YM2413Patch = 0; } });
+                    paramInfos.Add(new InstrumentParamInfo(instrument, "Modulator Tremolo", 0, 1, (YM2413InstrumentPatch.Infos[1].data[0] & 0x80) >> 7)
+                    { GetValue = () => { return (instrument.YM2413PatchRegs[0] & 0x80) >> 7; }, SetValue = (v) => { instrument.YM2413PatchRegs[0] = (byte)((instrument.YM2413PatchRegs[0] & (~0x80)) | ((v << 7) & 0x80)); instrument.YM2413Patch = 0; } });
+                    paramInfos.Add(new InstrumentParamInfo(instrument, "Modulator Vibrato", 0, 1, (YM2413InstrumentPatch.Infos[1].data[0] & 0x40) >> 6)
+                    { GetValue = () => { return (instrument.YM2413PatchRegs[0] & 0x40) >> 6; }, SetValue = (v) => { instrument.YM2413PatchRegs[0] = (byte)((instrument.YM2413PatchRegs[0] & (~0x40)) | ((v << 6) & 0x40)); instrument.YM2413Patch = 0; } });
+                    paramInfos.Add(new InstrumentParamInfo(instrument, "Modulator Sustained", 0, 1, (YM2413InstrumentPatch.Infos[1].data[0] & 0x20) >> 5)
+                    { GetValue = () => { return (instrument.YM2413PatchRegs[0] & 0x20) >> 5; }, SetValue = (v) => { instrument.YM2413PatchRegs[0] = (byte)((instrument.YM2413PatchRegs[0] & (~0x20)) | ((v << 5) & 0x20)); instrument.YM2413Patch = 0; } });
+                    paramInfos.Add(new InstrumentParamInfo(instrument, "Modulator Wave Rectified", 0, 1, (YM2413InstrumentPatch.Infos[1].data[3] & 0x08) >> 3)
+                    { GetValue = () => { return (instrument.YM2413PatchRegs[3] & 0x08) >> 3; }, SetValue = (v) => { instrument.YM2413PatchRegs[3] = (byte)((instrument.YM2413PatchRegs[3] & (~0x08)) | ((v << 3) & 0x08)); instrument.YM2413Patch = 0; } });
+                    paramInfos.Add(new InstrumentParamInfo(instrument, "Modulator KeyScaling", 0, 1, (YM2413InstrumentPatch.Infos[1].data[0] & 0x10) >> 4)
+                    { GetValue = () => { return (instrument.YM2413PatchRegs[0] & 0x10) >> 4; }, SetValue = (v) => { instrument.YM2413PatchRegs[0] = (byte)((instrument.YM2413PatchRegs[0] & (~0x10)) | ((v << 4) & 0x10)); instrument.YM2413Patch = 0; } });
+                    paramInfos.Add(new InstrumentParamInfo(instrument, "Modulator KeyScaling Level", 0, 3, (YM2413InstrumentPatch.Infos[1].data[2] & 0xc0) >> 6)
+                    { GetValue = () => { return (instrument.YM2413PatchRegs[2] & 0xc0) >> 6; }, SetValue = (v) => { instrument.YM2413PatchRegs[2] = (byte)((instrument.YM2413PatchRegs[2] & (~0xc0)) | ((v << 6) & 0xc0)); instrument.YM2413Patch = 0; } });
+                    paramInfos.Add(new InstrumentParamInfo(instrument, "Modulator FreqMultiplier", 0, 15, (YM2413InstrumentPatch.Infos[1].data[0] & 0x0f) >> 0)
+                    { GetValue = () => { return (instrument.YM2413PatchRegs[0] & 0x0f) >> 0; }, SetValue = (v) => { instrument.YM2413PatchRegs[0] = (byte)((instrument.YM2413PatchRegs[0] & (~0x0f)) | ((v << 0) & 0x0f)); instrument.YM2413Patch = 0; } });
+                    paramInfos.Add(new InstrumentParamInfo(instrument, "Modulator Attack", 0, 15, (YM2413InstrumentPatch.Infos[1].data[4] & 0xf0) >> 4)
+                    { GetValue = () => { return (instrument.YM2413PatchRegs[4] & 0xf0) >> 4; }, SetValue = (v) => { instrument.YM2413PatchRegs[4] = (byte)((instrument.YM2413PatchRegs[4] & (~0xf0)) | ((v << 4) & 0xf0)); instrument.YM2413Patch = 0; } });
+                    paramInfos.Add(new InstrumentParamInfo(instrument, "Modulator Decay", 0, 15, (YM2413InstrumentPatch.Infos[1].data[4] & 0x0f) >> 0)
+                    { GetValue = () => { return (instrument.YM2413PatchRegs[4] & 0x0f) >> 0; }, SetValue = (v) => { instrument.YM2413PatchRegs[4] = (byte)((instrument.YM2413PatchRegs[4] & (~0x0f)) | ((v << 0) & 0x0f)); instrument.YM2413Patch = 0; } });
+                    paramInfos.Add(new InstrumentParamInfo(instrument, "Modulator Sustain", 0, 15, (YM2413InstrumentPatch.Infos[1].data[6] & 0xf0) >> 4)
+                    { GetValue = () => { return (instrument.YM2413PatchRegs[6] & 0xf0) >> 4; }, SetValue = (v) => { instrument.YM2413PatchRegs[6] = (byte)((instrument.YM2413PatchRegs[6] & (~0xf0)) | ((v << 4) & 0xf0)); instrument.YM2413Patch = 0; } });
+                    paramInfos.Add(new InstrumentParamInfo(instrument, "Modulator Release", 0, 15, (YM2413InstrumentPatch.Infos[1].data[6] & 0x0f) >> 0)
+                    { GetValue = () => { return (instrument.YM2413PatchRegs[6] & 0x0f) >> 0; }, SetValue = (v) => { instrument.YM2413PatchRegs[6] = (byte)((instrument.YM2413PatchRegs[6] & (~0x0f)) | ((v << 0) & 0x0f)); instrument.YM2413Patch = 0; } });
+                    paramInfos.Add(new InstrumentParamInfo(instrument, "Modulator Level", 0, 63, (YM2413InstrumentPatch.Infos[1].data[2] & 0x3f) >> 0)
+                    { GetValue = () => { return (instrument.YM2413PatchRegs[2] & 0x3f) >> 0; }, SetValue = (v) => { instrument.YM2413PatchRegs[2] = (byte)((instrument.YM2413PatchRegs[2] & (~0x3f)) | ((v << 0) & 0x3f)); instrument.YM2413Patch = 0; } });
+                    paramInfos.Add(new InstrumentParamInfo(instrument, "Feedback", 0, 7, (YM2413InstrumentPatch.Infos[1].data[3] & 0x07) >> 0)
+                    { GetValue = () => { return (instrument.YM2413PatchRegs[3] & 0x07) >> 0; }, SetValue = (v) => { instrument.YM2413PatchRegs[3] = (byte)((instrument.YM2413PatchRegs[3] & (~0x07)) | ((v << 0) & 0x07)); instrument.YM2413Patch = 0; } });
                     break;
             }
 

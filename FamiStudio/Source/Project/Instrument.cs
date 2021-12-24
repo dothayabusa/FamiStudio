@@ -34,6 +34,10 @@ namespace FamiStudio
         private byte vrc7Patch = Vrc7InstrumentPatch.Bell;
         private byte[] vrc7PatchRegs = new byte[8];
 
+        // YM2413
+        private byte Ym2413Patch = YM2413InstrumentPatch.Violin;
+        private byte[] Ym2413PatchRegs = new byte[8];
+
         public int Id => id;
         public string Name { get => name; set => name = value; }
         public string NameWithExpansion => Name + (expansion == ExpansionType.None ? "" : $" ({ExpansionType.ShortNames[expansion]})");
@@ -44,13 +48,15 @@ namespace FamiStudio
         public int NumActiveEnvelopes => envelopes.Count(e => e != null);
         public bool HasReleaseEnvelope => envelopes[EnvelopeType.Volume] != null && envelopes[EnvelopeType.Volume].Release >= 0;
         public byte[] Vrc7PatchRegs => vrc7PatchRegs;
+        public byte[] YM2413PatchRegs => Ym2413PatchRegs;
 
         public bool IsRegularInstrument => expansion == ExpansionType.None;
         public bool IsFdsInstrument     => expansion == ExpansionType.Fds;
         public bool IsVrc6Instrument    => expansion == ExpansionType.Vrc6;
         public bool IsVrc7Instrument    => expansion == ExpansionType.Vrc7;
         public bool IsN163Instrument    => expansion == ExpansionType.N163;
-        public bool IsS5BInstrument     => expansion == ExpansionType.S5B;
+        public bool IsS5BInstrument => expansion == ExpansionType.S5B;
+        public bool IsYM2413Instrument => expansion == ExpansionType.YM2413;
 
         public Instrument()
         {
@@ -81,6 +87,11 @@ namespace FamiStudio
             {
                 vrc7Patch = Vrc7InstrumentPatch.Bell;
                 Array.Copy(Vrc7InstrumentPatch.Infos[Vrc7InstrumentPatch.Bell].data, vrc7PatchRegs, 8);
+            }
+            else if (expansion == ExpansionType.YM2413)
+            {
+                Ym2413Patch = YM2413InstrumentPatch.Violin;
+                Array.Copy(YM2413InstrumentPatch.Infos[YM2413InstrumentPatch.Violin].data, Ym2413PatchRegs, 8);
             }
         }
 
@@ -185,6 +196,16 @@ namespace FamiStudio
                     Array.Copy(Vrc7InstrumentPatch.Infos[vrc7Patch].data, vrc7PatchRegs, 8);
             }
         }
+        public byte YM2413Patch
+        {
+            get { return Ym2413Patch; }
+            set
+            {
+                Ym2413Patch = value;
+                if (Ym2413Patch != 0)
+                    Array.Copy(YM2413InstrumentPatch.Infos[Ym2413Patch].data, Ym2413PatchRegs, 8);
+            }
+        }
 
         public ushort FdsModSpeed     { get => fdsModSpeed;     set => fdsModSpeed = value; }
         public byte   FdsModDepth     { get => fdsModDepth;     set => fdsModDepth = value; }
@@ -210,6 +231,10 @@ namespace FamiStudio
         public static string GetVrc7PatchName(int preset)
         {
             return Vrc7InstrumentPatch.Infos[preset].name;
+        }
+        public static string GetYM2413PatchName(int preset)
+        {
+            return YM2413InstrumentPatch.Infos[preset].name;
         }
 
         public uint ComputeCRC(uint crc = 0)
@@ -293,6 +318,18 @@ namespace FamiStudio
                             buffer.Serialize(ref vrc7PatchRegs[5]);
                             buffer.Serialize(ref vrc7PatchRegs[6]);
                             buffer.Serialize(ref vrc7PatchRegs[7]);
+                            break;
+
+                        case ExpansionType.YM2413:
+                            buffer.Serialize(ref Ym2413Patch);
+                            buffer.Serialize(ref Ym2413PatchRegs[0]);
+                            buffer.Serialize(ref Ym2413PatchRegs[1]);
+                            buffer.Serialize(ref Ym2413PatchRegs[2]);
+                            buffer.Serialize(ref Ym2413PatchRegs[3]);
+                            buffer.Serialize(ref Ym2413PatchRegs[4]);
+                            buffer.Serialize(ref Ym2413PatchRegs[5]);
+                            buffer.Serialize(ref Ym2413PatchRegs[6]);
+                            buffer.Serialize(ref Ym2413PatchRegs[7]);
                             break;
                         case ExpansionType.Vrc6:
                             // At version 10 (FamiStudio 3.0.0) we added a master volume to the VRC6 saw.
@@ -395,6 +432,58 @@ namespace FamiStudio
             new Vrc7PatchInfo() { name = "BassGuitar",   data = new byte[] { 0x01, 0x02, 0xd3, 0x05, 0xc9, 0x95, 0x03, 0x02 } }, // BassGuitar  
             new Vrc7PatchInfo() { name = "Synthesizer",  data = new byte[] { 0x61, 0x63, 0x0c, 0x00, 0x94, 0xC0, 0x33, 0xf6 } }, // Synthesizer 
             new Vrc7PatchInfo() { name = "Chorus",       data = new byte[] { 0x21, 0x72, 0x0d, 0x00, 0xc1, 0xd5, 0x56, 0x06 } }  // Chorus      
+        };
+    }
+    public static class YM2413InstrumentPatch
+    {
+        public const byte Custom = 0;
+        public const byte Violin = 1;
+        public const byte Guitar = 2;
+        public const byte Piano = 3;
+        public const byte Flute = 4;
+        public const byte Clarinet = 5;
+        public const byte Oboe = 6;
+        public const byte Trumpet = 7;
+        public const byte Organ = 8;
+        public const byte Horn = 9;
+        public const byte Synthesizer = 10;
+        public const byte Harpsichord = 11;
+        public const byte Vibraphone = 12;
+        public const byte SynthBass = 13;
+        public const byte AcousticBass = 14;
+        public const byte ElectricGuitar = 15;
+        public const byte BassDrum = 16;
+
+        public struct YM2413PatchInfo
+            {
+            public string name;
+            public byte[] data;
+        };
+
+        public static readonly YM2413PatchInfo[] Infos = new[]
+        {
+            new YM2413PatchInfo() { name = "Custom",       data = new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 } }, // Custom      
+            new YM2413PatchInfo() { name = "Violin",         data = new byte[] { 0x71, 0x61, 0x1e, 0x17, 0xd0, 0x78, 0x00, 0x17 } }, // Violin        
+            new YM2413PatchInfo() { name = "Guitar",       data = new byte[] { 0x13, 0x41, 0x1a, 0x0d, 0xd8, 0xf7, 0x23, 0x13 } }, // Guitar      
+            new YM2413PatchInfo() { name = "Piano",        data = new byte[] { 0x13, 0x01, 0x99, 0x00, 0xf2, 0xd4, 0x21, 0x23 } }, // Piano       
+            new YM2413PatchInfo() { name = "Flute",        data = new byte[] { 0x11, 0x61, 0x0e, 0x07, 0x8d, 0x64, 0x70, 0x27 } }, // Flute       
+            new YM2413PatchInfo() { name = "Clarinet",     data = new byte[] { 0x32, 0x21, 0x1e, 0x06, 0xe1, 0x76, 0x01, 0x28 } }, // Clarinet    
+            new YM2413PatchInfo() { name = "Oboe", data = new byte[] { 0x31, 0x22, 0x16, 0x05, 0xe0, 0x71, 0x00, 0x18 } }, // Oboe
+            new YM2413PatchInfo() { name = "Trumpet",      data = new byte[] { 0x21, 0x61, 0x1d, 0x07, 0x82, 0x81, 0x11, 0x07 } }, // Trumpet     
+            new YM2413PatchInfo() { name = "Organ",    data = new byte[] { 0x33, 0x21, 0x2d, 0x13, 0xb0, 0x70, 0x00, 0x07 } }, // Organ   
+            new YM2413PatchInfo() { name = "Horn",     data = new byte[] { 0x61, 0x61, 0x1b, 0x06, 0x64, 0x65, 0x10, 0x17 } }, // Horn    
+            new YM2413PatchInfo() { name = "Synthesizer",    data = new byte[] { 0x41, 0x61, 0x0b, 0x18, 0x85, 0xf0, 0x81, 0x07 } }, // Synthesizer   
+            new YM2413PatchInfo() { name = "Harpsichord",   data = new byte[] { 0x33, 0x01, 0x83, 0x11, 0xea, 0xef, 0x10, 0x04 } }, // Harpsichord 
+            new YM2413PatchInfo() { name = "Vibraphone",        data = new byte[] { 0x17, 0xc1, 0x24, 0x07, 0xf8, 0xf8, 0x22, 0x12 } }, // Vibraphone       
+            new YM2413PatchInfo() { name = "Synth Bass",   data = new byte[] { 0x61, 0x50, 0x0c, 0x05, 0xd2, 0xf5, 0x40, 0x42 } }, // SynthBass  
+            new YM2413PatchInfo() { name = "Acoustic Bass",  data = new byte[] { 0x01, 0x01, 0x55, 0x03, 0xe4, 0x90, 0x03, 0x02 } }, // AcousticBass
+            new YM2413PatchInfo() { name = "Electric Guitar",       data = new byte[] { 0x41, 0x41, 0x89, 0x03, 0xf1, 0xe4, 0xc0, 0x13 } },  // ElectricGuitar
+            new YM2413PatchInfo() { name = "Closed Hat",       data = new byte[] { 0x01, 0x01, 0x18, 0x0f, 0xdf, 0xf8, 0x6a, 0x6d } },  // Closed Hat
+            new YM2413PatchInfo() { name = "High Hat",       data = new byte[] { 0x01, 0x01, 0x00, 0x00, 0xc8, 0xd8, 0xa7, 0x68 } },  // Hi Hat
+            new YM2413PatchInfo() { name = "Cymbal",       data = new byte[] { 0x05, 0x01, 0x00, 0x00, 0xf8, 0xaa, 0x59, 0x55 } },  // Cymbal
+            new YM2413PatchInfo() { name = "Toms",       data = new byte[] { 0x01, 0x01, 0x18, 0x0f, 0xdf, 0xf8, 0x6a, 0x6d } },  // Toms
+            new YM2413PatchInfo() { name = "Snare Drum",       data = new byte[] { 0x01, 0x01, 0x00, 0x00, 0xc8, 0xd8, 0xa7, 0x68 } },  // Snare Drum
+            new YM2413PatchInfo() { name = "Bass Drum",       data = new byte[] { 0x01, 0x01, 0x18, 0x0f, 0xdf, 0xf8, 0x6a, 0x6d } }  // Bass Drum
         };
     }
 

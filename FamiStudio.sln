@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.572
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FamiStudio", "FamiStudio\FamiStudio.csproj", "{20AC976F-95BC-42A4-B95C-85609728A36B}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -52,6 +52,7 @@ Global
 		{CE0D60E2-1356-4531-825F-A159850FB9D5}.Release|Any CPU.ActiveCfg = Release|Win32
 		{CE0D60E2-1356-4531-825F-A159850FB9D5}.Release|x64.ActiveCfg = Release|x64
 		{CE0D60E2-1356-4531-825F-A159850FB9D5}.Release|x86.ActiveCfg = Debug|Win32
+		{CE0D60E2-1356-4531-825F-A159850FB9D5}.Release|x86.Build.0 = Debug|Win32
 		{23F5A2AC-7A19-4FFF-98DD-06C61437D3D3}.Debug|Any CPU.ActiveCfg = Debug|Win32
 		{23F5A2AC-7A19-4FFF-98DD-06C61437D3D3}.Debug|x64.ActiveCfg = Debug|Win32
 		{23F5A2AC-7A19-4FFF-98DD-06C61437D3D3}.Debug|x86.ActiveCfg = Debug|Win32

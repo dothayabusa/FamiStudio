@@ -67,6 +67,7 @@ blargg_err_t Simple_Apu::sample_rate( long rate, bool pal, int tnd_mode )
 	mmc5.output(&buf);
 	namco.output(&buf);
 	sunsoft.output(&buf);
+	YM2413.output(&buf);
 	
 	tnd[0].clock_rate(pal ? 1662607 : 1789773);
 	tnd[1].clock_rate(pal ? 1662607 : 1789773);
@@ -109,6 +110,7 @@ void Simple_Apu::enable_channel(int expansion, int idx, bool enable)
 		case expansion_mmc5: mmc5.osc_output(idx, enable ? &buf : NULL); break;
 		case expansion_namco: namco.osc_output(idx, enable ? &buf : NULL); break;
 		case expansion_sunsoft: sunsoft.osc_output(idx, enable ? &buf : NULL); break;
+		case expansion_YM2413: YM2413.enable_channel(idx, enable ? &buf : NULL); break;
 		}
 	}
 }
@@ -126,6 +128,7 @@ void Simple_Apu::treble_eq(int exp, double treble, int sample_rate)
 		case expansion_mmc5: mmc5.treble_eq(eq); break;
 		case expansion_namco: namco.treble_eq(eq); break;
 		case expansion_sunsoft: sunsoft.treble_eq(eq); break;
+		case expansion_YM2413: YM2413.treble_eq(eq); break;
 	}
 }
 
@@ -140,6 +143,7 @@ void Simple_Apu::set_expansion_volume(int exp, double volume)
 		case expansion_mmc5: mmc5.volume(volume); break;
 		case expansion_namco: namco.volume(volume); break;
 		case expansion_sunsoft: sunsoft.volume(volume); break;
+		case expansion_YM2413: YM2413.volume(volume); break;
 	}
 }
 
@@ -158,7 +162,8 @@ void Simple_Apu::write_register(cpu_addr_t addr, int data)
 			if (expansions & expansion_mask_fds) fds.write_shadow_register(addr, data);
 			if (expansions & expansion_mask_mmc5) mmc5.write_shadow_register(addr, data);
 			if (expansions & expansion_mask_namco) namco.write_shadow_register(addr, data);
-			if (expansions & expansion_mask_sunsoft) sunsoft.write_shadow_register(addr, data); 
+			if (expansions & expansion_mask_sunsoft) sunsoft.write_shadow_register(addr, data);
+			if (expansions & expansion_mask_YM2413) YM2413.write_shadow_register(addr, data);
 		}
 	}
 	else
@@ -175,6 +180,7 @@ void Simple_Apu::write_register(cpu_addr_t addr, int data)
 			if (expansions & expansion_mask_mmc5) mmc5.write_register(clock(), addr, data);
 			if (expansions & expansion_mask_namco) namco.write_register(clock(), addr, data);
 			if (expansions & expansion_mask_sunsoft) sunsoft.write_register(clock(), addr, data);
+			if (expansions & expansion_mask_YM2413) YM2413.write_register(clock(), addr, data);
 		}
 	}
 }
@@ -190,6 +196,7 @@ void Simple_Apu::start_seeking()
 	if (expansions & expansion_mask_mmc5) mmc5.start_seeking();
 	if (expansions & expansion_mask_namco) namco.start_seeking();
 	if (expansions & expansion_mask_sunsoft) sunsoft.start_seeking();
+	if (expansions & expansion_mask_YM2413) YM2413.start_seeking();
 }
 
 void Simple_Apu::stop_seeking()
@@ -202,6 +209,7 @@ void Simple_Apu::stop_seeking()
 	if (expansions & expansion_mask_mmc5) mmc5.stop_seeking(time);
 	if (expansions & expansion_mask_namco) namco.stop_seeking(time);
 	if (expansions & expansion_mask_sunsoft) sunsoft.stop_seeking(time);
+	if (expansions & expansion_mask_YM2413) YM2413.stop_seeking(time);
 
 	seeking = false;
 }
@@ -232,7 +240,8 @@ void Simple_Apu::end_frame()
 	if (expansions & expansion_mask_fds) fds.end_frame(frame_length); 
 	if (expansions & expansion_mask_mmc5) mmc5.end_frame(frame_length); 
 	if (expansions & expansion_mask_namco) namco.end_frame(frame_length); 
-	if (expansions & expansion_mask_sunsoft) sunsoft.end_frame(frame_length); 
+	if (expansions & expansion_mask_sunsoft) sunsoft.end_frame(frame_length);
+	if (expansions & expansion_mask_YM2413) YM2413.end_frame(frame_length);
 
 	buf.end_frame( frame_length );
 	tnd[0].end_frame( frame_length );
@@ -259,6 +268,7 @@ void Simple_Apu::reset()
 	mmc5.reset();
 	namco.reset();
 	sunsoft.reset();
+	YM2413.reset();
 }
 
 void Simple_Apu::set_audio_expansions(long exp)

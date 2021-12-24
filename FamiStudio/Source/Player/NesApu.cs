@@ -64,9 +64,10 @@ namespace FamiStudio
         public const int APU_EXPANSION_MMC5    = 4;
         public const int APU_EXPANSION_NAMCO   = 5;
         public const int APU_EXPANSION_SUNSOFT = 6;
+        public const int APU_EXPANSION_YM2413 = 7;
 
         public const int APU_EXPANSION_FIRST   = 1;
-        public const int APU_EXPANSION_LAST    = 6;
+        public const int APU_EXPANSION_LAST    = 7;
 
         public const int APU_EXPANSION_MASK_NONE    = 0;
         public const int APU_EXPANSION_MASK_VRC6    = 1 << 0;
@@ -75,6 +76,7 @@ namespace FamiStudio
         public const int APU_EXPANSION_MASK_MMC5    = 1 << 3;
         public const int APU_EXPANSION_MASK_NAMCO   = 1 << 4;
         public const int APU_EXPANSION_MASK_SUNSOFT = 1 << 5;
+        public const int APU_EXPANSION_MASK_YM2413 = 1 << 6;
 
         public const int APU_PL1_VOL        = 0x4000;
         public const int APU_PL1_SWEEP      = 0x4001;
@@ -129,7 +131,37 @@ namespace FamiStudio
         public const int VRC7_REG_VOL_3     = 0x32;
         public const int VRC7_REG_VOL_4     = 0x33;
         public const int VRC7_REG_VOL_5     = 0x34;
-        public const int VRC7_REG_VOL_6     = 0x35;
+        public const int VRC7_REG_VOL_6 = 0x35;
+
+        public const int YM2413_SILENCE = 0xe000;
+        public const int YM2413_REG_SEL = 0x9010;
+        public const int YM2413_REG_WRITE = 0x9030;
+
+        public const int YM2413_REG_LO_1 = 0x10;
+        public const int YM2413_REG_LO_2 = 0x11;
+        public const int YM2413_REG_LO_3 = 0x12;
+        public const int YM2413_REG_LO_4 = 0x13;
+        public const int YM2413_REG_LO_5 = 0x14;
+        public const int YM2413_REG_LO_6 = 0x15;
+        public const int YM2413_REG_HI_1 = 0x20;
+        public const int YM2413_REG_HI_2 = 0x21;
+        public const int YM2413_REG_HI_3 = 0x22;
+        public const int YM2413_REG_HI_4 = 0x23;
+        public const int YM2413_REG_HI_5 = 0x24;
+        public const int YM2413_REG_HI_6 = 0x25;
+        public const int YM2413_REG_VOL_1 = 0x30;
+        public const int YM2413_REG_VOL_2 = 0x31;
+        public const int YM2413_REG_VOL_3 = 0x32;
+        public const int YM2413_REG_VOL_4 = 0x33;
+        public const int YM2413_REG_VOL_5 = 0x34;
+        public const int YM2413_REG_VOL_6 = 0x35;
+        public const int YM2413_REG_DRUM_CH = 0x40;
+        public const int YM2413_REG_DRUM_HH = 0x41;
+        public const int YM2413_REG_DRUM_CYM = 0x42;
+        public const int YM2413_REG_DRUM_TOM = 0x43;
+        public const int YM2413_REG_DRUM_SD = 0x44;
+        public const int YM2413_REG_DRUM_BD = 0x45;
+
 
         public const int FDS_WAV_START      = 0x4040;
         public const int FDS_VOL_ENV        = 0x4080;
@@ -216,6 +248,7 @@ namespace FamiStudio
         public static readonly ushort[]   NoteTablePAL     = new ushort[97];
         public static readonly ushort[]   NoteTableVrc6Saw = new ushort[97];
         public static readonly ushort[]   NoteTableVrc7    = new ushort[97];
+        public static readonly ushort[]   NoteTableYM2413 = new ushort[97];
         public static readonly ushort[]   NoteTableFds     = new ushort[97];
         public static readonly ushort[][] NoteTableN163    = new ushort[8][]
         {
@@ -267,6 +300,7 @@ namespace FamiStudio
                 NoteTableVrc6Saw[i] = (ushort)((clockNtsc * 16.0) / (freq * 14.0) - 0.5);
                 NoteTableFds[i]     = (ushort)((freq * 65536.0) / (clockNtsc / 1.0) + 0.5);
                 NoteTableVrc7[i]    = octave == 0 ? (ushort)(freq * 262144.0 / 49715.0 + 0.5) : (ushort)(NoteTableVrc7[(i - 1) % 12 + 1] << octave);
+                NoteTableYM2413[i] = octave == 0 ? (ushort)(freq * 262144.0 / 49715.0 + 0.5) : (ushort)(NoteTableYM2413[(i - 1) % 12 + 1] << octave);
 
                 for (int j = 0; j < 8; j++)
                     NoteTableN163[j][i] = (ushort)Math.Min(0xffff, ((freq * (j + 1) * 983040.0) / clockNtsc) / 4);
@@ -277,6 +311,7 @@ namespace FamiStudio
             DumpNoteTable(NoteTablePAL);
             DumpNoteTable(NoteTableVrc6Saw, "Saw");
             DumpNoteTable(NoteTableVrc7, "Vrc7");
+            DumpNoteTable(NoteTableYM2413, "YM2413");
             DumpNoteTable(NoteTableFds, "Fds");
             DumpNoteTable(NoteTableN163[0], "N163");
             DumpNoteTable(NoteTableN163[1], "N163");
@@ -318,6 +353,16 @@ namespace FamiStudio
                 case ChannelType.Vrc7Fm5:
                 case ChannelType.Vrc7Fm6:
                     return NoteTableVrc7;
+                case ChannelType.YM2413Fm1:
+                case ChannelType.YM2413Fm2:
+                case ChannelType.YM2413Fm3:
+                case ChannelType.YM2413Fm4:
+                case ChannelType.YM2413Fm5:
+                case ChannelType.YM2413Fm6:
+                case ChannelType.YM2413Fm7:
+                case ChannelType.YM2413Fm8:
+                case ChannelType.YM2413Fm9:
+                    return NoteTableYM2413;
                 default:
                     return pal ? NoteTablePAL : NoteTableNTSC;
             }
@@ -346,6 +391,15 @@ namespace FamiStudio
                 case ChannelType.N163Wave6:
                 case ChannelType.N163Wave7:
                 case ChannelType.N163Wave8:
+                case ChannelType.YM2413Fm1:
+                case ChannelType.YM2413Fm2:
+                case ChannelType.YM2413Fm3:
+                case ChannelType.YM2413Fm4:
+                case ChannelType.YM2413Fm5:
+                case ChannelType.YM2413Fm6:
+                case ChannelType.YM2413Fm7:
+                case ChannelType.YM2413Fm8:
+                case ChannelType.YM2413Fm9:
                     return NesApu.MaximumPeriod16Bit;
             }
 
@@ -405,6 +459,14 @@ namespace FamiStudio
                                 if ((expansions & APU_EXPANSION_MASK_SUNSOFT) != 0)
                                     WriteRegister(apuIdx, S5B_ADDR, S5B_REG_IO_A);
                                 WriteRegister(apuIdx, VRC7_SILENCE, 0x00); // Enable VRC7 audio.
+                                break;
+                            case APU_EXPANSION_YM2413:
+                                // HACK : There is a conflict between the YM2413 silence register and S5B data register, a write to
+                                // the silence register (E000) will be interpreted as a S5B data write. To prevent this, we
+                                // select a dummy register for S5B so that the write is discarded.
+                                if ((expansions & APU_EXPANSION_MASK_SUNSOFT) != 0)
+                                    WriteRegister(apuIdx, S5B_ADDR, S5B_REG_IO_A);
+                                WriteRegister(apuIdx, YM2413_SILENCE, 0x00); // Enable YM2413 audio.
                                 break;
                             case APU_EXPANSION_NAMCO:
                                 // This is mainly because the instrument player might not update all the channels all the time.

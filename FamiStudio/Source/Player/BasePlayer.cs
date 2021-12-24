@@ -472,6 +472,16 @@ namespace FamiStudio
                 case ChannelType.Vrc7Fm5:
                 case ChannelType.Vrc7Fm6:
                     return new ChannelStateVrc7(this, apuIdx, channelType);
+                case ChannelType.YM2413Fm1:
+                case ChannelType.YM2413Fm2:
+                case ChannelType.YM2413Fm3:
+                case ChannelType.YM2413Fm4:
+                case ChannelType.YM2413Fm5:
+                case ChannelType.YM2413Fm6:
+                case ChannelType.YM2413Fm7:
+                case ChannelType.YM2413Fm8:
+                case ChannelType.YM2413Fm9:
+                    return new ChannelStateYM2413(this, apuIdx, channelType);
                 case ChannelType.FdsWave:
                     return new ChannelStateFds(this, apuIdx, channelType);
                 case ChannelType.Mmc5Square1:

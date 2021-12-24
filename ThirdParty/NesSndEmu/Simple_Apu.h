@@ -15,6 +15,7 @@
 #include "nes_apu/Nes_Sunsoft.h"
 #include "nes_apu/Nes_Fme7.h"
 #include "nes_apu/Blip_Buffer.h"
+#include "nes_apu/Nes_YM2413.h"
 
 class Simple_Apu {
 public:
@@ -26,6 +27,7 @@ public:
 	enum { expansion_mmc5 = 4 };
 	enum { expansion_namco = 5 };
 	enum { expansion_sunsoft = 6 };
+	enum { expansion_YM2413 = 7 };
 
 	enum { expansion_mask_none       = 0 };
 	enum { expansion_mask_vrc6       = 1 << 0 };
@@ -34,6 +36,7 @@ public:
 	enum { expansion_mask_mmc5       = 1 << 3 };
 	enum { expansion_mask_namco      = 1 << 4 };
 	enum { expansion_mask_sunsoft    = 1 << 5 };
+	enum { expansion_mask_YM2413     = 1 << 6 };
 
 	// These mode are used for separate channel WAV export or stereo export.
 	// When exporting each channel individually, we don't get the volume interactions
@@ -122,6 +125,7 @@ private:
 	Nes_Namco namco;
 	//Nes_Sunsoft sunsoft; // My version, based on emu2149
 	Nes_Fme7 sunsoft; // Blaarg's version from Game_Music_Emu.
+	Nes_YM2413 YM2413;
 	Blip_Buffer buf;
 	Blip_Buffer tnd[3]; // [0] is used normally, [0][1][2] are only used in "separate_tnd_mode", for stereo/separate channels export.
 	blip_time_t time;

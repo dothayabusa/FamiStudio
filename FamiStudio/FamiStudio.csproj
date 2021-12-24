@@ -8,7 +8,7 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>FamiStudio</RootNamespace>
     <AssemblyName>FamiStudio</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
@@ -27,6 +27,7 @@
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -102,6 +103,7 @@
     <Compile Include="Source\ChannelStates\ChannelStateVrc6Saw.cs" />
     <Compile Include="Source\ChannelStates\ChannelStateVrc6Square.cs" />
     <Compile Include="Source\ChannelStates\ChannelStateVrc7.cs" />
+    <Compile Include="Source\ChannelStates\ChannelStateYM2413.cs" />
     <Compile Include="Source\IO\AudioExportUtils.cs" />
     <Compile Include="Source\IO\FamistudioTextFile.cs" />
     <Compile Include="Source\IO\FamitoneMusicFile.cs" />
@@ -438,8 +440,12 @@
     <EmbeddedResource Include="Resources\InstrumentSunsoft.png" />
     <EmbeddedResource Include="Resources\InstrumentVRC6%402x.png" />
     <EmbeddedResource Include="Resources\InstrumentVRC6.png" />
-    <EmbeddedResource Include="Resources\InstrumentVRC7%402x.png" />
-    <EmbeddedResource Include="Resources\InstrumentVRC7.png" />
+    <EmbeddedResource Include="Resources\InstrumentVRC7%402x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\InstrumentVRC7.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\Loop%402x.png" />
     <EmbeddedResource Include="Resources\Loop.png" />
     <EmbeddedResource Include="Resources\LoopNone%402x.png" />
@@ -610,6 +616,12 @@
     <Content Include="NotSoFatso.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <EmbeddedResource Include="Resources\InstrumentYM2413.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\InstrumentYM2413%402x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
     <Content Include="ShineMp3.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

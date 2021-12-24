@@ -1385,7 +1385,7 @@ namespace FamiStudio
                 projectFile = System.IO.Path.GetFileName(project.Filename);
 
             var version = Utils.SplitVersionNumber(PlatformUtils.ApplicationVersion, out var betaNumber);
-            var title = $"FamiStudio {version} - {projectFile}";
+            var title = $"FamiStudio - Custom Experimental Fork | DO NOT DISTRIBUTE ! {version} - {projectFile}";
 
             if (betaNumber > 0)
                 title += $" - BETA {betaNumber} - DEVELOPMENT VERSION DO NOT DISTRIBUTE!";
@@ -1443,7 +1443,7 @@ namespace FamiStudio
         public void StopOrReleaseIntrumentNote(bool allowRecording = false)
         {
             if (selectedInstrument != null &&
-                (selectedInstrument.HasReleaseEnvelope || selectedInstrument.IsVrc7Instrument) &&
+                (selectedInstrument.HasReleaseEnvelope || selectedInstrument.IsVrc7Instrument || selectedInstrument.IsYM2413Instrument) &&
                 song.Channels[selectedChannelIndex].SupportsInstrument(selectedInstrument))
             {
                 instrumentPlayer.ReleaseNote(selectedChannelIndex);
