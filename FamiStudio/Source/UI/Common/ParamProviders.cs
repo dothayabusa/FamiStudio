@@ -186,7 +186,7 @@ namespace FamiStudio
                     break;
 
                 case ExpansionType.YM2413:
-                    paramInfos.Add(new InstrumentParamInfo(instrument, "Patch", 0, 15, 1, null, true)
+                    paramInfos.Add(new InstrumentParamInfo(instrument, "Patch", 0, 21, 1, null, true)
                     { GetValue = () => { return instrument.YM2413Patch; }, GetValueString = () => { return Instrument.GetYM2413PatchName(instrument.YM2413Patch); }, SetValue = (v) => { instrument.YM2413Patch = (byte)v; } });
                     paramInfos.Add(new InstrumentParamInfo(instrument, "Carrier Tremolo", 0, 1, (YM2413InstrumentPatch.Infos[1].data[1] & 0x80) >> 7)
                     { GetValue = () => { return (instrument.YM2413PatchRegs[1] & 0x80) >> 7; }, SetValue = (v) => { instrument.YM2413PatchRegs[1] = (byte)((instrument.YM2413PatchRegs[1] & (~0x80)) | ((v << 7) & 0x80)); instrument.YM2413Patch = 0; } });

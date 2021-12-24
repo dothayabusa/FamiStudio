@@ -452,7 +452,12 @@ namespace FamiStudio
         public const byte SynthBass = 13;
         public const byte AcousticBass = 14;
         public const byte ElectricGuitar = 15;
-        public const byte BassDrum = 16;
+        public const byte ClosedHat = 16;
+        public const byte HighHat = 17;
+        public const byte Cymbal = 18;
+        public const byte Toms = 19;
+        public const byte SnareDrum = 20;
+        public const byte BassDrum = 21;
 
         public struct YM2413PatchInfo
             {

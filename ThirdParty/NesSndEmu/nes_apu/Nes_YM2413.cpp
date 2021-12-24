@@ -42,7 +42,8 @@ void Nes_YM2413::reset_opll()
 	OPLL_reset(opll);
 	OPLL_setChipMode(opll, 0); // YM2413 mode.
 	OPLL_resetPatch(opll, OPLL_2413_TONE); // Use YM2413 default instruments.
-	OPLL_setMask(opll, ~0x53); // 9 channels = 0x53 | 6 channels = 0x3f
+	OPLL_setMask(opll, ~0x1fff); // 9 channels = 0x53 | 6 channels = 0x3f
+	
 }
 
 void Nes_YM2413::output(Blip_Buffer* buf)
