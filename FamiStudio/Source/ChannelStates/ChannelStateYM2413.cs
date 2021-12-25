@@ -54,9 +54,21 @@ namespace FamiStudio
                     if (instrument.YM2413Patch > 16)
                     {
                         WriteYM2413Register(NesApu.YM2413_REG_RHYTHM_MODE, Ym2413Instrument);
-                        WriteYM2413Register(NesApu.YM2413_REG_DRUM_BD, Ym2413Instrument);
-                        WriteYM2413Register(NesApu.YM2413_REG_DRUM_SD_HH, Ym2413Instrument);
-                        WriteYM2413Register(NesApu.YM2413_REG_DRUM_TOM_CYM, Ym2413Instrument);
+                        
+                        if (instrument.YM2413Patch == 16)
+                            WriteYM2413Register(NesApu.YM2413_REG_DRUM_HH, Ym2413Instrument);
+
+                        if (instrument.YM2413Patch == 17)
+                            WriteYM2413Register(NesApu.YM2413_REG_DRUM_TCT, Ym2413Instrument);
+
+                        if (instrument.YM2413Patch == 18)
+                            WriteYM2413Register(NesApu.YM2413_REG_DRUM_TOM, Ym2413Instrument);
+
+                        if (instrument.YM2413Patch == 19)
+                            WriteYM2413Register(NesApu.YM2413_REG_DRUM_SD, Ym2413Instrument);
+
+                        if (instrument.YM2413Patch == 20)
+                            WriteYM2413Register(NesApu.YM2413_REG_DRUM_BD, Ym2413Instrument);
                     }
             
                 }
