@@ -1044,7 +1044,7 @@ static void update_output(OPLL *opll) {
   }
 
   /* CH7 */
-  if (opll->patch_number[6] <= 15) {
+  if (opll->patch_number[21] <= 21) {
     if (!(opll->mask & OPLL_MASK_CH(6))) {
       out[6] = _MO(calc_slot_car(opll, 6, calc_slot_mod(opll, 6)));
     }
@@ -1055,7 +1055,7 @@ static void update_output(OPLL *opll) {
   }
 
   /* CH8 */
-  if (opll->patch_number[7] <= 15) {
+  if (opll->patch_number[7] <= 21) {
     if (!(opll->mask & OPLL_MASK_CH(7))) {
       out[7] = _MO(calc_slot_car(opll, 7, calc_slot_mod(opll, 7)));
     }
@@ -1069,7 +1069,7 @@ static void update_output(OPLL *opll) {
   }
 
   /* CH9 */
-  if (opll->patch_number[8] <= 15) {
+  if (opll->patch_number[8] <= 21) {
     if (!(opll->mask & OPLL_MASK_CH(8))) {
       out[8] = _MO(calc_slot_car(opll, 8, calc_slot_mod(opll, 8)));
     }

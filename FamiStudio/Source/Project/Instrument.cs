@@ -452,12 +452,11 @@ namespace FamiStudio
         public const byte SynthBass = 13;
         public const byte AcousticBass = 14;
         public const byte ElectricGuitar = 15;
-        public const byte ClosedHat = 16;
-        public const byte HighHat = 17;
-        public const byte Cymbal = 18;
-        public const byte Toms = 19;
-        public const byte SnareDrum = 20;
-        public const byte BassDrum = 21;
+        public const byte HighHat = 16;
+        public const byte Cymbal = 17;
+        public const byte Toms = 18;
+        public const byte SnareDrum = 19;
+        public const byte BassDrum = 20;
 
         public struct YM2413PatchInfo
             {
@@ -483,12 +482,12 @@ namespace FamiStudio
             new YM2413PatchInfo() { name = "Synth Bass",   data = new byte[] { 0x61, 0x50, 0x0c, 0x05, 0xd2, 0xf5, 0x40, 0x42 } }, // SynthBass  
             new YM2413PatchInfo() { name = "Acoustic Bass",  data = new byte[] { 0x01, 0x01, 0x55, 0x03, 0xe4, 0x90, 0x03, 0x02 } }, // AcousticBass
             new YM2413PatchInfo() { name = "Electric Guitar",       data = new byte[] { 0x41, 0x41, 0x89, 0x03, 0xf1, 0xe4, 0xc0, 0x13 } },  // ElectricGuitar
-            new YM2413PatchInfo() { name = "Closed Hat",       data = new byte[] { 0x01, 0x01, 0x18, 0x0f, 0xdf, 0xf8, 0x6a, 0x6d } },  // Closed Hat
-            new YM2413PatchInfo() { name = "High Hat",       data = new byte[] { 0x01, 0x01, 0x00, 0x00, 0xc8, 0xd8, 0xa7, 0x68 } },  // Hi Hat
-            new YM2413PatchInfo() { name = "Cymbal",       data = new byte[] { 0x05, 0x01, 0x00, 0x00, 0xf8, 0xaa, 0x59, 0x55 } },  // Cymbal
-            new YM2413PatchInfo() { name = "Toms",       data = new byte[] { 0x01, 0x01, 0x18, 0x0f, 0xdf, 0xf8, 0x6a, 0x6d } },  // Toms
-            new YM2413PatchInfo() { name = "Snare Drum",       data = new byte[] { 0x01, 0x01, 0x00, 0x00, 0xc8, 0xd8, 0xa7, 0x68 } },  // Snare Drum
-            new YM2413PatchInfo() { name = "Bass Drum",       data = new byte[] { 0x01, 0x01, 0x18, 0x0f, 0xdf, 0xf8, 0x6a, 0x6d } }  // Bass Drum
+            new YM2413PatchInfo() { name = "Closed Hat",       data = new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 } },  // Closed Hat
+            new YM2413PatchInfo() { name = "High Hat",       data = new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 } },  // Hi Hat
+            new YM2413PatchInfo() { name = "Cymbal",       data = new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 } },  // Cymbal
+            new YM2413PatchInfo() { name = "Toms",       data = new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 } },  // Toms
+            new YM2413PatchInfo() { name = "Snare Drum",       data = new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 } },  // Snare Drum
+            new YM2413PatchInfo() { name = "Bass Drum",       data = new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 } }  // Bass Drum
         };
     }
 

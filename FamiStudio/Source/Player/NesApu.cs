@@ -131,7 +131,7 @@ namespace FamiStudio
         public const int VRC7_REG_VOL_3     = 0x32;
         public const int VRC7_REG_VOL_4     = 0x33;
         public const int VRC7_REG_VOL_5     = 0x34;
-        public const int VRC7_REG_VOL_6 = 0x35;
+        public const int VRC7_REG_VOL_6     = 0x35;
 
         public const int YM2413_SILENCE = 0xe000;
         public const int YM2413_REG_SEL = 0x9010;
@@ -156,11 +156,10 @@ namespace FamiStudio
         public const int YM2413_REG_VOL_4 = 0x33;
         public const int YM2413_REG_VOL_5 = 0x34;
         public const int YM2413_REG_VOL_6 = 0x35;
-        public const int YM2413_REG_DRUM_HH = 0x41;
-        public const int YM2413_REG_DRUM_CYM = 0x42;
-        public const int YM2413_REG_DRUM_TOM = 0x43;
-        public const int YM2413_REG_DRUM_SD = 0x44;
-        public const int YM2413_REG_DRUM_BD = 0x45;
+        public const int YM2413_REG_DRUM_BD = 0x36;
+        public const int YM2413_REG_DRUM_SD_HH = 0x37;
+        public const int YM2413_REG_DRUM_TOM_CYM = 0x38;
+
 
 
         public const int FDS_WAV_START      = 0x4040;

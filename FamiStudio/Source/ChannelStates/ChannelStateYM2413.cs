@@ -50,8 +50,18 @@ namespace FamiStudio
                     }
 
                     Ym2413Instrument = (byte)(instrument.YM2413Patch << 4);
+
+                    if (instrument.YM2413Patch > 16)
+                    {
+                        WriteYM2413Register(NesApu.YM2413_REG_RHYTHM_MODE, Ym2413Instrument);
+                        WriteYM2413Register(NesApu.YM2413_REG_DRUM_BD, Ym2413Instrument);
+                        WriteYM2413Register(NesApu.YM2413_REG_DRUM_SD_HH, Ym2413Instrument);
+                        WriteYM2413Register(NesApu.YM2413_REG_DRUM_TOM_CYM, Ym2413Instrument);
+                    }
+            
                 }
             }
+
         }
 
         public override void IntrumentLoadedNotify(Instrument instrument)
@@ -108,8 +118,14 @@ namespace FamiStudio
 
                 prevPeriodHi = periodHi;
             }
+            
+
+            
 
             base.UpdateAPU();
         }
+
+
     };
+
 }
