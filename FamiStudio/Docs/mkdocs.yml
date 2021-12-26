@@ -1,0 +1,24 @@
+site_name: FamiStudio Documentation
+nav:
+- Welcome: index.md   
+- User Guide:
+  - "Installation": install.md
+  - "Basics": basics.md
+  - "Editing Notes": pianoroll.md
+  - "Editing Patterns": sequencer.md
+  - "Editing Instruments & Arpeggios": instruments.md
+  - "Editing Songs & Project": song.md
+  - "Editing DPCM Samples": dpcm.md
+  - "Importing Songs": import.md
+  - "Exporting Songs": export.md
+  - "Using Expansion Audio": expansion.md
+  - "Cleaning-up your Project": cleanup.md
+  - "Configuring FamiStudio": config.md
+  - "Command-line Processing": cmdline.md
+  - "NES/Famicom Sound Engine": soundengine.md
+  - "Troubleshooting": troubleshooting.md
+  - "Acknowledgements": thanks.md
+  - "Change Log": changelog.md
+extra_css:
+    - css/extra.css    
+theme: slate

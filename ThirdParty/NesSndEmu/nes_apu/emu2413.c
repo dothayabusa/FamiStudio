@@ -703,7 +703,7 @@ static INLINE void update_rhythm_mode(OPLL *opll) {
       set_patch(opll, 6, opll->reg[0x36] >> 4);
     }
   } else if (new_rhythm_mode) {
-    opll->patch_number[6] = 6;
+    opll->patch_number[6] = 16;
     opll->slot[SLOT_BD1].eg_state = RELEASE;
     opll->slot[SLOT_BD1].eg_out = EG_MUTE;
     opll->slot[SLOT_BD2].eg_state = RELEASE;
@@ -1044,7 +1044,7 @@ static void update_output(OPLL *opll) {
   }
 
   /* CH7 */
-  if (opll->patch_number[6] <= 20) {
+  if (opll->patch_number[6] <= 15) {
     if (!(opll->mask & OPLL_MASK_CH(6))) {
       out[6] = _MO(calc_slot_car(opll, 6, calc_slot_mod(opll, 6)));
     }
@@ -1055,7 +1055,7 @@ static void update_output(OPLL *opll) {
   }
 
   /* CH8 */
-  if (opll->patch_number[7] <= 20) {
+  if (opll->patch_number[7] <= 15) {
     if (!(opll->mask & OPLL_MASK_CH(7))) {
       out[7] = _MO(calc_slot_car(opll, 7, calc_slot_mod(opll, 7)));
     }
@@ -1069,7 +1069,7 @@ static void update_output(OPLL *opll) {
   }
 
   /* CH9 */
-  if (opll->patch_number[8] <= 20) {
+  if (opll->patch_number[8] <= 15) {
     if (!(opll->mask & OPLL_MASK_CH(8))) {
       out[8] = _MO(calc_slot_car(opll, 8, calc_slot_mod(opll, 8)));
     }

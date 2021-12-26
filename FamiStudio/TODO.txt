@@ -1,0 +1,122 @@
+3.2.2
+=====
+- CanExportToSoundEngine broken.
+- 
+
+3.3.0
+=====
+- Right-click functionality.
+- N163 : Write address location in the waveform editor (how2 idea)
+- Rewrite that crazy ugly function in sound engine + figure out how to have more  (change volume or double-special code for rare ones).
+- ffmpeg path on Linux should work on path (Puna on CC discord).
+- Option to override DMC initial value on sample mapping.
+- Improve oscilloscope stability (min square norm?)
+- Uncompressed envelopes
+- Improve no-attack.
+- Register viewer.
+- Volume/effect scaling
+- Paste special, option to rename patterns.
+- Way to temporarely disable snapping (FL studio does it with ALT).
+- Improve snapping. (Ask Infu for feedback, he showed an app that he found intuitive)
+- Make TimeFormat = 1 the default
+- Scroll bar in sequencer
+- CTRL+A to select all? Or drag an instrument on sequencer to replace instrument on pattern?
+- C0 is hidden by scroll bars
+- C0 is hidden in piano roll video
+- LOW PRIORITY : Piano roll scale on desktop?
+- LOW PRIORITY : Poppin issue on FDS? See messages from "JHĀKRI" on discord. Change volume on FDS with a blank waveform.
+- LOW PRIORITY : Fix GTK leak (GTK 3.x?), or 2.12.45
+
+Videos:
+=======
+- Tutorial for FamiTracker users
+
+Linux notes 
+=========== 
+- When slow startup in VM : dbus-launch --exit-with-session mono FamiStudio.exe 
+- GTK# : sudo apt-get install gtk-sharp2  
+	- This seem to be enough (sudo apt-get install libgtk2.0-cil) 
+- How to recompile with old linux: 
+	- Ubuntu 16.04.6 
+	- Install cmake-gui 
+	- OpenAL Soft 
+		- Install ALSA libs (libasound2-dev) 
+		- Download openal-soft code 
+		- Run cmake-gui in /build folder. 
+		- Configure 
+		- Choose static C + C++ libs 
+		- Choose Release (no debug info) 
+		- Generate. 
+		- make! 
+	- OGG:
+		- Download ogg/vorbis code
+		- cmake-gui, static lib, configure
+		- CMakeFiles/vorbis.dir/flags.make, add -fPIC
+			C_FLAGS = -O3 -DNDEBUG -fPIC 
+		- Same for OGG
+	- NesSndEmu + NotSoFatso, run script. 
+	- RtMidi, need to add static C/C++ libs to cmake file. 
+ 
+MacOS notes
+===========
+- MacOS Sierra, fully patched is 10.12.6, with AppKit version 1504.83.101
+- Must compile the MacLauncher with this to link to the AppKit version that
+  matches GTK+2. This will make MacOS load these older versions afterwards,
+  even on more recent OS'es.
+- Must compile vorbis on old version too (like Sierra). 
+- If problem installing MacOS VM, see @DOUG fix at
+  https://www.geekrar.com/how-to-fix-the-cpu-has-been-disabled-by-the-guest-os/
+	cpuid.0.eax = "0000:0000:0000:0000:0000:0000:0000:1011"
+	cpuid.0.ebx = "0111:0101:0110:1110:0110:0101:0100:0111"
+	cpuid.0.ecx = "0110:1100:0110:0101:0111:0100:0110:1110"
+	cpuid.0.edx = "0100:1001:0110:0101:0110:1110:0110:1001"
+	cpuid.1.eax = "0000:0000:0000:0001:0000:0110:0111:0001"
+	cpuid.1.ebx = "0000:0010:0000:0001:0000:1000:0000:0000"
+	cpuid.1.ecx = "1000:0010:1001:1000:0010:0010:0000:0011"
+	cpuid.1.edx = "0000:0111:1000:1011:1111:1011:1111:1111"
+- If NAT network doesnt work (problem is only in Monterey right now) do that:
+	ethernet0.virtualDev = "vmxnet3"
+
+Android Notes
+=============
+Key Store
+- Alias : FamiStudio
+- Pass : Usual x2
+- 30 Years
+- Only full name entered.
+
+Trailer/scroll 
+============== 
+- Stashed in 5beed88a1bc487ec2cbc725b9d749a464e57dece. 
+ 
+MkDocs 
+====== 
+- Install Python 
+- pip install mkdocs 
+- pip install mkdocs-bootswatch 
+ 
+Discord 
+======= 
+- Invite link: https://discord.gg/88UPmxh 
+
+Cartoon Tutorial
+================
+- Sketch
+- Hue: -180
+- Chroma: -20
+
+Backlog: 
+=========
+- Write delta counter (Zxx).
+- ROM export with expansion?
+- More options for oscilloscope (https://github.com/maxim-zhao/SidWizPlus/wiki)
+- Overclocking (2x, 3x, 4x would be a good start).
+- NSF import read DMC initial value.
+- Save snapping + qwerty settings + some export settings.
+- Left/right pan with +/- (cubase style)?
+- TailWindz : CTRL + Scroll should do "something"
+- Hardware sweep (how to not conflict with smooth vibrato?)
+- Scales
+- Loop prevention for envelope (brad issue). 
+- Raw FDS modulation table envelope. 
+- Instrument folders + collapse entire sections (samples, arps, etc.) 

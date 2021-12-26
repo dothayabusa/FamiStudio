@@ -51,25 +51,25 @@ namespace FamiStudio
 
                     Ym2413Instrument = (byte)(instrument.YM2413Patch << 4);
 
-                    if (instrument.YM2413Patch > 16)
-                    {
-                        WriteYM2413Register(NesApu.YM2413_REG_RHYTHM_MODE, Ym2413Instrument);
+                    //if (instrument.YM2413Patch <= 16)
+                    //{
+                      //  WriteYM2413Register(NesApu.YM2413_REG_RHYTHM_MODE, 0x31);
                         
-                        if (instrument.YM2413Patch == 16)
-                            WriteYM2413Register(NesApu.YM2413_REG_DRUM_HH, Ym2413Instrument);
+                        //if (instrument.YM2413Patch == 16)
+                         //   WriteYM2413Register(NesApu.YM2413_REG_RHYTHM_MODE, 0x21);
 
-                        if (instrument.YM2413Patch == 17)
-                            WriteYM2413Register(NesApu.YM2413_REG_DRUM_TCT, Ym2413Instrument);
+                       // if (instrument.YM2413Patch == 17)
+                  //          WriteYM2413Register(NesApu.YM2413_REG_RHYTHM_MODE, 0x24);
 
-                        if (instrument.YM2413Patch == 18)
-                            WriteYM2413Register(NesApu.YM2413_REG_DRUM_TOM, Ym2413Instrument);
+      //                  if (instrument.YM2413Patch == 18)
+        //                    WriteYM2413Register(NesApu.YM2413_REG_RHYTHM_MODE, 0x22);
 
-                        if (instrument.YM2413Patch == 19)
-                            WriteYM2413Register(NesApu.YM2413_REG_DRUM_SD, Ym2413Instrument);
+          //              if (instrument.YM2413Patch == 19)
+                            //WriteYM2413Register(NesApu.YM2413_REG_RHYTHM_MODE, 0x28);
 
-                        if (instrument.YM2413Patch == 20)
-                            WriteYM2413Register(NesApu.YM2413_REG_DRUM_BD, Ym2413Instrument);
-                    }
+            //            if (instrument.YM2413Patch == 20)
+              //              WriteYM2413Register(NesApu.YM2413_REG_RHYTHM_MODE, 0x30);
+                    //}
             
                 }
             }
@@ -127,6 +127,9 @@ namespace FamiStudio
                 WriteYM2413Register(NesApu.YM2413_REG_LO_1  + channelIdx, periodLo);
                 WriteYM2413Register(NesApu.YM2413_REG_HI_1  + channelIdx, periodHi);
                 WriteYM2413Register(NesApu.YM2413_REG_VOL_1 + channelIdx, Ym2413Instrument | volume);
+                WriteYM2413Register(NesApu.YM2413_REG_RHYTHM_MODE, 0x20);
+
+
 
                 prevPeriodHi = periodHi;
             }
