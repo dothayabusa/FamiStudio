@@ -42,7 +42,7 @@ void Nes_YM2413::reset_opll()
 	OPLL_reset(opll);
 	OPLL_setChipMode(opll, 0); // YM2413 mode.
 	OPLL_resetPatch(opll, OPLL_2413_TONE); // Use YM2413 default instruments.
-	OPLL_setMask(opll, ~0x1fff); // 9 channels = 0x53 | 6 channels = 0x3f
+	OPLL_setMask(opll, ~0x3fff); // 9 channels = 0x53 | 6 channels = 0x3f
 	
 }
 
@@ -73,7 +73,7 @@ void Nes_YM2413::enable_channel(int idx, bool enabled)
 			
 			// The mask only stops updating the channel, whatever was left in 
 			// the output buffer remains and creates noise.
-			opll->ch_out[idx] = 0; 
+//			opll->ch_out[idx] = 0; 
 		}
 	}
 }

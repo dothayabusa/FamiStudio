@@ -9,6 +9,7 @@ namespace FamiStudio
         protected byte Ym2413Instrument = 0;
         protected byte prevPeriodHi;
 
+
         public ChannelStateYM2413(IPlayerInterface player, int apuIdx, int channelType) : base(player, apuIdx, channelType, false)
         {
             channelIdx = channelType - ChannelType.YM2413Fm1;
@@ -23,6 +24,7 @@ namespace FamiStudio
 
         protected override void LoadInstrument(Instrument instrument)
         {
+
             if (instrument != null)
             {
                 Debug.Assert(instrument.IsYM2413Instrument);
@@ -48,34 +50,20 @@ namespace FamiStudio
                         for (byte i = 0; i < 8; i++)
                             WriteYM2413Register(i, instrument.YM2413PatchRegs[i]);
                     }
-
+                    
                     Ym2413Instrument = (byte)(instrument.YM2413Patch << 4);
 
-                    //if (instrument.YM2413Patch <= 16)
-                    //{
-                      //  WriteYM2413Register(NesApu.YM2413_REG_RHYTHM_MODE, 0x31);
-                        
-                        //if (instrument.YM2413Patch == 16)
-                         //   WriteYM2413Register(NesApu.YM2413_REG_RHYTHM_MODE, 0x21);
 
-                       // if (instrument.YM2413Patch == 17)
-                  //          WriteYM2413Register(NesApu.YM2413_REG_RHYTHM_MODE, 0x24);
 
-      //                  if (instrument.YM2413Patch == 18)
-        //                    WriteYM2413Register(NesApu.YM2413_REG_RHYTHM_MODE, 0x22);
-
-          //              if (instrument.YM2413Patch == 19)
-                            //WriteYM2413Register(NesApu.YM2413_REG_RHYTHM_MODE, 0x28);
-
-            //            if (instrument.YM2413Patch == 20)
-              //              WriteYM2413Register(NesApu.YM2413_REG_RHYTHM_MODE, 0x30);
-                    //}
-            
                 }
+
+
+
             }
 
         }
 
+        
         public override void IntrumentLoadedNotify(Instrument instrument)
         {
             Debug.Assert(instrument.IsYM2413Instrument && instrument.YM2413Patch == 0);
@@ -86,6 +74,19 @@ namespace FamiStudio
                 note.Instrument.YM2413Patch == 0)
             {
                 forceInstrumentReload = true;
+            }
+
+                        var noteVal = GetPeriod();
+            Console.WriteLine(noteVal);
+
+            if (instrument.YM2413Patch == 16);
+            channelType = ChannelType.YM2413Fm7; 
+            noteVal = 688;
+                
+
+            {
+                    WriteYM2413Register(NesApu.YM2413_REG_RHYTHM_MODE, 0x20);
+                WriteYM2413Register(NesApu.YM2413_REG_RHYTHM_MODE, 0x30);
             }
         }
 
@@ -121,26 +122,45 @@ namespace FamiStudio
                 var periodLo = (byte)(period & 0xff);
                 var periodHi = (byte)(0x30 | ((octave & 0x7) << 1) | ((period >> 8) & 1));
 
+
                 if (noteTriggered && (prevPeriodHi & 0x10) != 0)
                     WriteYM2413Register(NesApu.YM2413_REG_HI_1 + channelIdx, prevPeriodHi & ~(0x10));
 
                 WriteYM2413Register(NesApu.YM2413_REG_LO_1  + channelIdx, periodLo);
                 WriteYM2413Register(NesApu.YM2413_REG_HI_1  + channelIdx, periodHi);
                 WriteYM2413Register(NesApu.YM2413_REG_VOL_1 + channelIdx, Ym2413Instrument | volume);
-                WriteYM2413Register(NesApu.YM2413_REG_RHYTHM_MODE, 0x20);
-
 
 
                 prevPeriodHi = periodHi;
+
             }
-            
+            if (instrument.YM2413Patch == 16) ;
+
+            {
+
+                var noteVal = GetPeriod();
+                Console.WriteLine(noteVal);
+
+                channelType = ChannelType.YM2413Fm7;
+                noteVal = 688;
+
+
+                
+                    WriteYM2413Register(NesApu.YM2413_REG_RHYTHM_MODE, 0x20);
+                    WriteYM2413Register(NesApu.YM2413_REG_RHYTHM_MODE, 0x30);
+            }
+
+
 
             
+
+
+
 
             base.UpdateAPU();
+
         }
 
 
-    };
-
+    }
 }
