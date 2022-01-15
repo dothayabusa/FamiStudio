@@ -37,6 +37,7 @@ namespace FamiStudio
         // YM2413
         public byte Ym2413Patch = YM2413InstrumentPatch.Violin;
         private byte[] Ym2413PatchRegs = new byte[8];
+        public byte RhythmMode;
 
         public int Id => id;
         public string Name { get => name; set => name = value; }
@@ -330,6 +331,7 @@ namespace FamiStudio
                             buffer.Serialize(ref Ym2413PatchRegs[5]);
                             buffer.Serialize(ref Ym2413PatchRegs[6]);
                             buffer.Serialize(ref Ym2413PatchRegs[7]);
+                            buffer.Serialize(ref RhythmMode);
                             break;
                         case ExpansionType.Vrc6:
                             // At version 10 (FamiStudio 3.0.0) we added a master volume to the VRC6 saw.
@@ -452,7 +454,6 @@ namespace FamiStudio
         public const byte SynthBass = 13;
         public const byte AcousticBass = 14;
         public const byte ElectricGuitar = 15;
-        public const byte Drums = 16;
 
         public struct YM2413PatchInfo
             {
@@ -478,7 +479,7 @@ namespace FamiStudio
             new YM2413PatchInfo() { name = "Synth Bass",   data = new byte[] { 0x61, 0x50, 0x0c, 0x05, 0xd2, 0xf5, 0x40, 0x42 } }, // SynthBass  
             new YM2413PatchInfo() { name = "Acoustic Bass",data = new byte[] { 0x01, 0x01, 0x55, 0x03, 0xe4, 0x90, 0x03, 0x02 } }, // AcousticBass
             new YM2413PatchInfo() { name = "Electric Guitar",data = new byte[] { 0x41, 0x41, 0x89, 0x03, 0xf1, 0xe4, 0xc0, 0x13 } },  // ElectricGuitar
-            new YM2413PatchInfo() { name = "Drums",     data = new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 } },  // DRUMMIGNS !!!
+
 
         };
     }

@@ -204,6 +204,7 @@ namespace FamiStudio
             "EffectNoteDelay",
             "EffectCutDelay",
             "EffectVolume",
+            "EffectRhythmMode",
             "EffectFrame" // Special background rectangle image.
         };
 

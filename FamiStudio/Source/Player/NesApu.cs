@@ -156,6 +156,8 @@ namespace FamiStudio
         public const int YM2413_REG_VOL_5 = 0x34;
         public const int YM2413_REG_VOL_6 = 0x35;
         public const int YM2413_REG_RHYTHM_MODE = 0x0E;
+        public const int YM2413_REG_CH8_VOL = 0x37;
+        public const int YM2413_REG_CH9_VOL = 0x38;
 
 
 

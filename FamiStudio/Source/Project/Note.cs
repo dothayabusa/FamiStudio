@@ -33,7 +33,8 @@ namespace FamiStudio
             "Duty Cycle",
             "Note Delay",
             "Cut Delay",
-            "Volume Slide"
+            "Volume Slide",
+            "Rhythm Mode",
         };
 
         public const int VolumeMax       = 0x0f;
@@ -63,8 +64,9 @@ namespace FamiStudio
         public const int EffectDutyCycle    =  7; // Vxx
         public const int EffectNoteDelay    =  8; // Gxx
         public const int EffectCutDelay     =  9; // Sxx
-        public const int EffectVolumeSlide  = 10; // Axy
-        public const int EffectCount        = 11;
+        public const int EffectVolumeSlide  = 10; // Nxy    YM2413
+        public const int EffectRhythmMode = 11; // Axx
+        public const int EffectCount        = 12;
 
         public const int EffectVolumeMask         = (1 << EffectVolume);
         public const int EffectVibratoMask        = (1 << EffectVibratoSpeed) | (1 << EffectVibratoDepth);
@@ -76,9 +78,10 @@ namespace FamiStudio
         public const int EffectNoteDelayMask      = (1 << EffectNoteDelay);
         public const int EffectCutDelayMask       = (1 << EffectCutDelay);
         public const int EffectVolumeSlideMask    = (1 << EffectVolumeSlide);
+        public const int EffectRhythmModeMask = (1 << EffectRhythmMode);
         public const int EffectVolumeAndSlideMask = (1 << EffectVolume) | (1 << EffectVolumeSlide);
 
-        public const int EffectAllMask = 0x7ff; // Must be updated every time a new effect is added.
+        public const int EffectAllMask = (1 << (EffectCount - 1)) - 1; // Must be updated every time a new effect is added.
 
         // As of FamiStudio 3.0.0, these are semi-deprecated and mostly used in parts of the
         // code that have not been migrated to compound notes (notes with release and duration) 
@@ -95,7 +98,7 @@ namespace FamiStudio
         private ushort     effectMask;
         private ushort     duration;
         private ushort     release;
-        private Instrument instrument;
+        public Instrument instrument;
         private Arpeggio   arpeggio;
 
         // Effects.
@@ -109,6 +112,8 @@ namespace FamiStudio
         private byte       dutyCycle;
         private byte       noteDelay;
         private byte       cutDelay;
+        private byte       rhythmMode;
+
 
         // As of version 5 (FamiStudio 2.0.0), these are deprecated and are only kept around
         // for migration.
@@ -150,6 +155,7 @@ namespace FamiStudio
                 dutyCycle = 0;
                 noteDelay = 0;
                 cutDelay = 0;
+                rhythmMode = 0;
             }
         }
 
@@ -370,7 +376,14 @@ namespace FamiStudio
             get { Debug.Assert(HasCutDelay); return cutDelay; }
             set { cutDelay = (byte)Utils.Clamp(value, 0, 31); HasCutDelay = true; }
         }
-        
+
+        public byte RhythmMode
+        {
+            get { Debug.Assert(HasRhythmMode); return rhythmMode; }
+            set { rhythmMode = (byte)Utils.Clamp(value, 0, 1); HasRhythmMode = true; }
+        }
+
+
         public bool HasVolume
         {
             get { return (effectMask & EffectVolumeMask) != 0; }
@@ -430,6 +443,14 @@ namespace FamiStudio
             get { return (effectMask & EffectCutDelayMask) != 0; }
             set { if (value) effectMask |= EffectCutDelayMask; else effectMask = (ushort)(effectMask & ~EffectCutDelayMask); }
         }
+
+        public bool HasRhythmMode
+        {
+            get { return (effectMask & EffectRhythmModeMask) != 0; }
+            set { if (value) effectMask |= EffectRhythmModeMask; else effectMask = (ushort)(effectMask & ~EffectRhythmModeMask); }
+        }
+
+        
 
         public bool HasAttack
         {
@@ -622,6 +643,7 @@ namespace FamiStudio
             if (buffer.Version >=  8 && (EffectMask & EffectDutyCycleMask) != 0) buffer.Serialize(ref dutyCycle);
             if (buffer.Version >=  8 && (EffectMask & EffectNoteDelayMask) != 0) buffer.Serialize(ref noteDelay);
             if (buffer.Version >=  8 && (EffectMask & EffectCutDelayMask)  != 0) buffer.Serialize(ref cutDelay);
+            if ((EffectMask & EffectRhythmModeMask) != 0) buffer.Serialize(ref rhythmMode);
             if (buffer.Version >= 11 && (EffectMask & EffectVolumeAndSlideMask) == EffectVolumeAndSlideMask) buffer.Serialize(ref volumeSlide);
 
             // At version 7 (FamiStudio 2.2.0) we added support for arpeggios.
@@ -644,6 +666,7 @@ namespace FamiStudio
                 case EffectDutyCycle    : return HasDutyCycle;
                 case EffectNoteDelay    : return HasNoteDelay;
                 case EffectCutDelay     : return HasCutDelay;
+                case EffectRhythmMode     : return HasRhythmMode;
             }
 
             return false;
@@ -664,6 +687,8 @@ namespace FamiStudio
                 case EffectDutyCycle    : return DutyCycle;
                 case EffectNoteDelay    : return NoteDelay;
                 case EffectCutDelay     : return CutDelay;
+                case EffectRhythmMode:    return RhythmMode;
+
             }
 
             return 0;
@@ -684,6 +709,7 @@ namespace FamiStudio
                 case EffectDutyCycle    : DutyCycle         = (byte)Utils.Clamp(val, byte.MinValue, byte.MaxValue); break;
                 case EffectNoteDelay    : NoteDelay         = (byte)Utils.Clamp(val, byte.MinValue, byte.MaxValue); break;
                 case EffectCutDelay     : CutDelay          = (byte)Utils.Clamp(val, byte.MinValue, byte.MaxValue); break;
+                case EffectRhythmMode   : RhythmMode        = (byte)Utils.Clamp(val, byte.MinValue, byte.MaxValue); break;
             }
         }
         
@@ -702,6 +728,7 @@ namespace FamiStudio
                 case EffectDutyCycle    : HasDutyCycle    = false; break;
                 case EffectNoteDelay    : HasNoteDelay    = false; break;
                 case EffectCutDelay     : HasCutDelay     = false; break;
+                case EffectRhythmMode   : HasRhythmMode   = false; break;
             }
         }
 
@@ -744,6 +771,7 @@ namespace FamiStudio
                 case EffectDutyCycle    : return channel.IsVrc6Channel ? 7 : 3;
                 case EffectNoteDelay    : return 31;
                 case EffectCutDelay     : return 31;
+                case EffectRhythmMode: return 1;
             }
 
             return 0;

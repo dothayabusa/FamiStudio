@@ -622,6 +622,8 @@
     <EmbeddedResource Include="Resources\InstrumentYM2413%402x.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\EffectRhythmMode.png" />
+    <EmbeddedResource Include="Resources\EffectRhythmMode%402x.png" />
     <Content Include="ShineMp3.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
