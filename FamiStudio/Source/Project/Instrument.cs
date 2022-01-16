@@ -59,6 +59,8 @@ namespace FamiStudio
         public bool IsS5BInstrument => expansion == ExpansionType.S5B;
         public bool IsYM2413Instrument => expansion == ExpansionType.YM2413;
 
+        public bool IsRhythmModeInstrument => expansion == ExpansionType.YM2413;
+
         public Instrument()
         {
         }

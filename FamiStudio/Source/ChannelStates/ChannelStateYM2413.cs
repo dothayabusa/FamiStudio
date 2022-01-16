@@ -9,6 +9,7 @@ namespace FamiStudio
         protected byte Ym2413Instrument = 0;
         protected byte prevPeriodHi;
         protected byte rhythmMode;
+        protected byte rhythmModeInstrument = 0;
 
 
 
@@ -38,9 +39,11 @@ namespace FamiStudio
                 Debug.Assert(instrument.IsYM2413Instrument);
 
                 if (instrument.IsYM2413Instrument)
-                {
-                    if (instrument.YM2413Patch == 0)
+                    if (instrument.IsRhythmModeInstrument)
                     {
+                    if (instrument.YM2413Patch == 0)
+                            if (instrument.RhythmMode == 0)
+                            {
                         // Tell other channels using custom patches that they will need 
                         // to reload their instruments.
                         player.NotifyInstrumentLoaded(
@@ -63,12 +66,13 @@ namespace FamiStudio
                     }
 
                     Ym2413Instrument = (byte)(instrument.YM2413Patch << 4);
-                    
+                        rhythmModeInstrument = (byte)(instrument.YM2413Patch << 4);
 
 
-     
 
-                }
+
+
+                    }
 
 
 
